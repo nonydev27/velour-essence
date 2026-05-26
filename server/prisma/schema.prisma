@@ -1,0 +1,75 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  DELIVERED
+}
+
+// ==========================================
+// MODELS
+// ==========================================
+
+model Admin {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String   @db.Text
+  price       Float    // Using Float for monetary values
+  images      String[] // Array of Cloudinary secure URLs
+  category    String   // e.g., "Oud", "Floral", "Woody"
+  stock       Int      @default(0)
+  isFeatured  Boolean  @default(false)
+  discount    Int      @default(0) // Percentage discount (0-100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relationships
+  promotionalSales Sale[]
+}
+
+model Order {
+  id           String      @id @default(uuid()) // Database internal ID
+  orderId      String      @unique              // Custom readable ID (e.g., VE-20260526-XXXX)
+  customerName String
+  phone        String
+  school       String      // Captured from checkout dropdown selection
+  hostel       String      // Hostel room or specific location address
+  items        Json        // Snapshot array of: { productId, name, qty, price }
+  totalAmount  Float
+  status       OrderStatus @default(PENDING)
+  paystackRef  String      @unique              // Unique transaction reference from Paystack
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Sale {
+  id             String   @id @default(uuid())
+  productId      String
+  discountPercent Int
+  startDate      DateTime
+  endDate        DateTime
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relationships
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
