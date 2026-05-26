@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+@theme {
+  /* ── Burgundy (primary) ── */
+  --color-burgundy:        #800020;
+  --color-burgundy-dark:   #5C0016;
+  --color-burgundy-light:  #A3274A;
+
+  /* ── Neutrals ── */
+  --color-cream:           #FAF7F4;
+  --color-warm-white:      #FFFFFF;
+  --color-charcoal:        #1A1A1A;
+  --color-warm-gray:       #6B6B6B;
+  --color-border:          #E8E0D8;
+
+  /* ── Accent ── */
+  --color-gold:            #C9A96E;
+
+  /* ── Semantic ── */
+  --color-success:         #4A7C59;
+  --color-error:           #B91C1C;
+
+  /* ── Typography ── */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', ui-serif, Georgia, serif;
+}
