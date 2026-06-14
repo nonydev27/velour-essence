@@ -8,6 +8,8 @@ import ProductPage from '../pages/client/ProductPage';
 import CartPage from '../pages/client/CartPage';
 import CheckoutPage from '../pages/client/CheckoutPage';
 import OrderConfirmationPage from '../pages/client/OrderConfirmationPage';
+import AboutUsPage from '../pages/client/AboutUsPage';
+import ContactPage from '../pages/client/ContactPage';
 
 // Admin pages
 import AdminLoginPage from '../pages/admin/AdminLoginPage';
@@ -29,6 +31,8 @@ export default function AppRouter() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/order-confirmation" element={<OrderConfirmationPage />} />
+        <Route path="/about" element={<AboutUsPage />} />
+        <Route path="/contact" element={<ContactPage />} />
 
         {/* Admin public */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
