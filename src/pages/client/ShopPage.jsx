@@ -30,12 +30,7 @@ export default function ShopPage() {
   return (
     <PageWrapper>
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-3 text-xs text-warm-gray">
-          <span>Home</span> <span className="mx-1">/</span> <span className="text-charcoal font-medium">Shop</span>
-        </div>
-      </div>
-
+     
       <div className="max-w-7xl mx-auto px-6 py-8">
         <h1 className="text-2xl font-serif text-charcoal mb-6">Shop</h1>
 
