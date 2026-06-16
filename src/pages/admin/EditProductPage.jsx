@@ -87,7 +87,7 @@ export default function EditProductPage() {
             {errors.description && <p className="text-xs text-error">{errors.description.message}</p>}
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Input label="Price (₦)" type="number" step="0.01" error={errors.price?.message} {...register('price')} />
+            <Input label="Price (₵)" type="number" step="0.01" error={errors.price?.message} {...register('price')} />
             <Input label="Stock" type="number" error={errors.stock?.message} {...register('stock')} />
           </div>
           <div className="grid grid-cols-2 gap-4">

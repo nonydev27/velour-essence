@@ -1,5 +1,5 @@
 export function formatPrice(amount) {
-  return `₦${Number(amount).toLocaleString('en-NG')}`;
+  return `₵${Number(amount).toLocaleString('en-GH')}`;
 }
 
 export function discountedPrice(price, discountPercent) {

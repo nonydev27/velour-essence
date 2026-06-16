@@ -6,7 +6,7 @@ import { SCHOOLS } from '../../constants/schools';
 
 const schema = z.object({
   customerName: z.string().min(2, 'Name must be at least 2 characters'),
-  phone: z.string().regex(/^0[789][01]\d{8}$/, 'Enter a valid Nigerian phone number (e.g. 08012345678)'),
+  phone: z.string().regex(/^0[235]\d{8}$/, 'Enter a valid Ghanaian phone number (e.g. 0241234567)'),
   school: z.string().min(1, 'Please select your school'),
   hostel: z.string().min(2, 'Please enter your hostel/address'),
 });
@@ -28,7 +28,7 @@ export default function CheckoutForm({ onValid }) {
       />
       <Input
         label="Phone Number"
-        placeholder="08012345678"
+        placeholder="0241234567"
         type="tel"
         error={errors.phone?.message}
         {...register('phone')}

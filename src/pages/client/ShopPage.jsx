@@ -84,8 +84,8 @@ export default function ShopPage() {
                 className="w-full accent-burgundy"
               />
               <div className="flex justify-between text-xs text-warm-gray mt-1">
-                <span>₦0</span>
-                <span>₦{priceMax.toLocaleString()}</span>
+                <span>₵0</span>
+                <span>₵{priceMax.toLocaleString()}</span>
               </div>
             </div>
 

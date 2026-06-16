@@ -27,8 +27,8 @@ const channels = [
   },
   {
     label: 'Phone',
-    handle: '+234 801 234 5678',
-    href: 'tel:+2348012345678',
+    handle: '+233 55 964 6969',
+    href: 'tel:+233559646969',
     description: 'Speak directly with our support team. Available Mon–Sat, 9am–6pm.',
     color: 'bg-charcoal',
     icon: <Phone className="w-5 h-5" />,

@@ -24,7 +24,7 @@ const team = [
     bio: 'Karl co-founded Velour Essence to redefine how Ghanaians experience luxury scents. His operational expertise and deep understanding of supply chain management have been instrumental in building a seamless, customer-first experience.',
     school: 'Kwame Nkrumah University of Science and Technology',
     degree: 'B.Sc. Computer Science',
-    achievement: 'Young Entrepreneur of the Year – Nigeria Business Awards 2023',
+    achievement: 'Young Entrepreneur of the Year – Ghana Business Awards 2023',
     tag: 'Co-Founder',
   },
 ];
@@ -32,11 +32,11 @@ const team = [
 const values = [
   {
     title: 'Authenticity',
-    body: 'Every bottle we sell is 100% genuine. No duplicates, no compromises — just pure, verified luxury.',
+    body: 'Every bottle we sell is 100% genuine. No duplicates, no compromises, just pure, verified luxury.',
   },
   {
     title: 'Accessibility',
-    body: 'We believe great fragrance should not be a privilege. We deliver across Nigeria at fair, honest prices.',
+    body: 'We believe great fragrance should not be a privilege. We deliver across Ghana at fair, honest prices.',
   },
   {
     title: 'Excellence',
@@ -84,8 +84,8 @@ export default function AboutUsPage() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-white/60 text-base leading-relaxed max-w-2xl mx-auto"
           >
-            Velour Essence was born from a simple belief — that every person deserves a scent
-            that tells their story. We are a proudly Nigerian luxury fragrance brand dedicated
+            Velour Essence was born from a simple belief that every person deserves a scent
+            that tells their story. We are a proudly Ghanaian luxury fragrance brand dedicated
             to bringing the finest perfumes directly to you.
           </motion.p>
         </div>
@@ -207,7 +207,7 @@ export default function AboutUsPage() {
           <p className="text-xs tracking-[0.25em] uppercase text-warm-gray mb-3">Have a question?</p>
           <h2 className="font-serif text-3xl text-charcoal mb-4">We Would Love to Hear From You</h2>
           <p className="text-warm-gray text-sm leading-relaxed mb-8 max-w-lg mx-auto">
-            Whether you need help choosing a scent, have a question about an order, or just want to say hello — our team is always happy to connect.
+            Whether you need help choosing a scent, have a question about an order, or just want to say hello, our team is always happy to connect.
           </p>
           <a
             href="/contact"

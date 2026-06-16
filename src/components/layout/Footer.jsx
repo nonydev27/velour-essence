@@ -29,8 +29,8 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10 px-6 py-4 flex items-center justify-between text-xs">
-        <p className="text-white/40 ">&copy; {new Date().getFullYear()} Velour Essence. All rights reserved.</p>
+      <div className="border-t border-white/10 px-6 py-4 flex items-center justify-center text-xs">
+        <p className="text-white/40 ">&copy; {new Date().getFullYear()} Velour Essence. All rights reserved. &nbsp;</p>
         <Link to="/admin/login" className="text-white/30 hover:text-white/60 transition-colors">Admin</Link>
       </div>
     </footer>
