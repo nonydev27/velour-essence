@@ -18,7 +18,7 @@ const team = [
   {
     name: 'Karl Djansi',
     role: 'Co-Founder & Head of Operations',
-    image: '/karls.jpeg',
+    image: '/kdjansi.jpg',
     phone: '+233 20 738 4908',
     email: 'karl@velouressence.com',
     bio: 'Karl co-founded Velour Essence to redefine how Ghanaians experience luxury scents. His operational expertise and deep understanding of supply chain management have been instrumental in building a seamless, customer-first experience.',
