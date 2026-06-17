@@ -13,7 +13,12 @@ const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173' }));
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+].filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins }));
 app.use('/api/payment/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
