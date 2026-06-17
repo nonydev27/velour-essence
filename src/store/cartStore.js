@@ -7,17 +7,17 @@ export const useCartStore = create(
       items: [],
       isOpen: false,
 
-      addItem: (product) => {
+      addItem: (product, qty = 1) => {
         const items = get().items;
         const existing = items.find((i) => i.id === product.id);
         if (existing) {
           set({
             items: items.map((i) =>
-              i.id === product.id ? { ...i, qty: i.qty + 1 } : i
+              i.id === product.id ? { ...i, qty: i.qty + qty } : i
             ),
           });
         } else {
-          set({ items: [...items, { ...product, qty: 1 }] });
+          set({ items: [...items, { ...product, qty }] });
         }
       },
 

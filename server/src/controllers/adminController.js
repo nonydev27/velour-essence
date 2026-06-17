@@ -97,4 +97,46 @@ async function getDashboardStats(req, res, next) {
   }
 }
 
-module.exports = { login, seedAdmin, getDashboardStats };
+/**
+ * GET /api/admin/payments
+ * Returns all payment attempts (PENDING + SUCCESS) for the admin dashboard
+ */
+async function getPayments(req, res, next) {
+  try {
+    const { status, page = 1, limit = 30 } = req.query;
+    const where = {};
+    if (status) where.status = status;
+
+    const [payments, total] = await Promise.all([
+      prisma.payment.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (parseInt(page) - 1) * parseInt(limit),
+        take: parseInt(limit),
+      }),
+      prisma.payment.count({ where }),
+    ]);
+
+    const [totalSuccess, totalPending, successAmount] = await Promise.all([
+      prisma.payment.count({ where: { status: 'SUCCESS' } }),
+      prisma.payment.count({ where: { status: 'PENDING' } }),
+      prisma.payment.aggregate({ where: { status: 'SUCCESS' }, _sum: { amount: true } }),
+    ]);
+
+    res.json({
+      success: true,
+      data: payments,
+      total,
+      page: parseInt(page),
+      stats: {
+        totalSuccess,
+        totalPending,
+        totalRevenue: successAmount._sum.amount || 0,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { login, seedAdmin, getDashboardStats, getPayments };

@@ -8,9 +8,9 @@ const TERMII_BASE = 'https://v3.api.termii.com/api';
  * @param {string} message - SMS message body
  */
 async function sendSMS(to, message) {
-  // Normalize Nigerian numbers to international format
+  // Normalize Ghanaian numbers to international format
   let phone = to.trim().replace(/\s+/g, '');
-  if (phone.startsWith('0')) phone = '234' + phone.slice(1);
+  if (phone.startsWith('0')) phone = '233' + phone.slice(1);
 
   try {
     const { data } = await axios.post(`${TERMII_BASE}/sms/send`, {
@@ -43,7 +43,7 @@ async function sendOrderConfirmationSMS(order) {
     `Hi ${order.customerName}, your Velour Essence order has been placed!\n` +
     `Order ID: ${order.orderId}\n` +
     `Items: ${itemsList}\n` +
-    `Total: ₦${Number(order.totalAmount).toLocaleString('en-NG')}\n` +
+    `Total: GH₵${Number(order.totalAmount).toLocaleString('en-GH')}\n` +
     `We'll deliver to ${order.school} — ${order.hostel}.\n` +
     `Questions? Reply to this message.`;
 

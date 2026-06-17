@@ -71,33 +71,42 @@ A **database** is where all your data lives permanently. Even if the server rest
 
 **Prisma** is the tool that talks to the database for you, so you don't have to write raw SQL (the old-school database language). You describe your data in a `schema.prisma` file and Prisma handles the rest.
 
-We defined **4 tables** (called "models" in Prisma):
+We defined **5 tables** (called "models" in Prisma):
 
 #### Product table
 Stores every perfume in the shop:
 - `id` — a unique ID (like a product barcode)
 - `name` — "Oud Elixir"
 - `description` — the text describing the scent
-- `price` — the price in Naira
+- `price` — the price in GHS
 - `images` — an array of URLs pointing to photos stored on Cloudinary
 - `category` — "Oud", "Floral", "Woody", etc.
 - `stock` — how many bottles are left
 - `isFeatured` — should it show on the homepage?
+- `isVisible` — is it currently shown in the shop? (admin can toggle this per-product)
 - `discount` — percentage off (0 means no discount)
 - `createdAt` / `updatedAt` — timestamps added automatically
 
 #### Order table
-Every time a customer pays and their order is created:
+Every time a customer pays and their order is confirmed:
 - `id` — internal database ID
 - `orderId` — the human-readable ID like `VE-20260527-8821`
 - `customerName` — "Jane Doe"
-- `phone` — "08123456789"
-- `school` — "University of Lagos (UNILAG)"
-- `hostel` — "Queen's Hall, Room 16"
+- `phone` — "0241234567" (Ghanaian format)
+- `school` — "University of Ghana (UG)"
+- `hostel` — "Commonwealth Hall, Room 16"
 - `items` — a JSON snapshot of what was bought (name, qty, price)
-- `totalAmount` — total in Naira
+- `totalAmount` — total in GHS
 - `status` — PENDING → CONFIRMED → DELIVERED
 - `paystackRef` — the unique reference Paystack gives every transaction
+
+#### Payment table
+Tracks every payment attempt — before and after completion. This powers the admin Payments dashboard:
+- `reference` — Paystack transaction reference (unique)
+- `customerName`, `phone`, `amount` — captured at checkout
+- `status` — `PENDING` (customer started but hasn't paid yet) or `SUCCESS` (paid)
+- `orderId` — filled in once payment is confirmed (links to the Order record)
+- Created when checkout begins, updated when payment is verified
 
 #### Admin table
 Stores admin accounts (just email + hashed password):
@@ -286,6 +295,7 @@ This defines all the URL routes for the frontend:
 /admin/products      → ProductsPage    (protected)
 /admin/products/add  → AddProductPage  (protected)
 /admin/orders        → OrdersPage      (protected)
+/admin/payments      → PaymentsPage    (protected)
 /admin/sales         → SalesPage       (protected)
 ```
 
@@ -500,17 +510,21 @@ Components are like LEGO bricks. You build them once and reuse them everywhere.
 
 **ProductsPage.jsx**
 - Search, category, and status filter dropdowns
-- Table with columns: Product (image + name), Price, Status, Actions
+- Table with columns: Product (image + name), Price, Status, Visibility, Actions
 - Status badges: In Stock (green), Low Stock (yellow), Out of Stock (red)
+- Visibility badge: green "Visible" or grey "Hidden" — click it to toggle instantly without opening the edit page
+- Hidden products are dimmed in the table
 - Edit and Delete action buttons per row
 
 **AddProductPage.jsx**
 - Form to create a new product
 - Fields: Name, Description, Price, Stock, Category, Discount%, Featured checkbox, Image upload
+- Visibility toggle switch — defaults ON (visible); flip OFF to create the product as hidden
 - Images uploaded to Cloudinary through the backend
 
 **EditProductPage.jsx**
 - Same form pre-filled with existing product data
+- Visibility toggle switch — shows the current state, toggle to hide/show the product
 - New image upload replaces existing images
 
 **OrdersPage.jsx**
@@ -518,6 +532,14 @@ Components are like LEGO bricks. You build them once and reuse them everywhere.
 - Table: Order ID, Customer, Total, Status, Date, Actions
 - Action buttons: View (eye icon), and a status-advance button ("Mark as Confirmed" / "Mark as Delivered")
 - Pagination at the bottom
+
+**PaymentsPage.jsx**
+- Real-time view of every payment attempt — paid AND pending (auto-refreshes every 10 seconds)
+- Summary stats at the top: total revenue, total paid transactions, total pending
+- Table: Reference, Customer, Phone, Amount, Status (Paid / Pending), Order ID, Date
+- Filter by status (All / Paid / Pending)
+- Manual refresh button
+- Pending = customer opened checkout but never completed payment; Success = paid and order created
 
 **SalesPage.jsx**
 - Left panel: form to create a new sale (select product, discount %, start date, end date)

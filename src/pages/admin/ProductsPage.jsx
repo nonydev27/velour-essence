@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Eye, EyeOff } from 'lucide-react';
 import AdminSidebar from '../../components/layout/AdminSidebar';
 import Spinner from '../../components/ui/Spinner';
 import Badge from '../../components/ui/Badge';
-import { useProducts, useDeleteProduct } from '../../hooks/useProducts';
+import { useProductsAdmin, useDeleteProduct, useToggleProductVisibility } from '../../hooks/useProducts';
 import { useToast } from '../../components/ui/Toast';
 import { formatPrice } from '../../utils/formatPrice';
 
@@ -16,8 +16,9 @@ const stockStatus = (stock) => {
 };
 
 export default function ProductsPage() {
-  const { data: products, isLoading } = useProducts();
+  const { data: products, isLoading } = useProductsAdmin();
   const { mutate: deleteProduct } = useDeleteProduct();
+  const { mutate: toggleVisibility } = useToggleProductVisibility();
   const toast = useToast();
 
   function handleDelete(id, name) {
@@ -65,7 +66,7 @@ export default function ProductsPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-[#f4f5f7] border-b border-border">
-                    {['Product', 'Price', 'Status', 'Actions'].map((h) => (
+                    {['Product', 'Price', 'Status', 'Visibility', 'Actions'].map((h) => (
                       <th key={h} className="text-left px-5 py-3 text-xs font-semibold text-warm-gray uppercase tracking-wider">
                         {h}
                       </th>
@@ -74,11 +75,11 @@ export default function ProductsPage() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {(!products || products.length === 0) ? (
-                    <tr><td colSpan={4} className="text-center py-16 text-warm-gray">No products yet.</td></tr>
+                    <tr><td colSpan={5} className="text-center py-16 text-warm-gray">No products yet.</td></tr>
                   ) : products.map((p) => {
                     const { label, cls } = stockStatus(p.stock);
                     return (
-                      <tr key={p.id} className="hover:bg-cream/20 transition-colors">
+                      <tr key={p.id} className={`hover:bg-cream/20 transition-colors ${!p.isVisible ? 'opacity-60' : ''}`}>
                         <td className="px-5 py-3.5 flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg overflow-hidden bg-cream shrink-0">
                             <img src={p.images?.[0] || FALLBACK} alt={p.name} className="w-full h-full object-cover" />
@@ -92,6 +93,22 @@ export default function ProductsPage() {
                         <td className="px-5 py-3.5">
                           <Badge className={cls}>{label}</Badge>
                           {p.isFeatured && <Badge className="ml-1 bg-burgundy/10 text-burgundy">Featured</Badge>}
+                        </td>
+                        <td className="px-5 py-3.5">
+                          <button
+                            onClick={() => toggleVisibility(p.id, {
+                              onError: () => toast('Failed to update visibility', 'error'),
+                            })}
+                            title={p.isVisible ? 'Visible — click to hide' : 'Hidden — click to show'}
+                            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+                              p.isVisible
+                                ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                            }`}
+                          >
+                            {p.isVisible ? <Eye size={12} /> : <EyeOff size={12} />}
+                            {p.isVisible ? 'Visible' : 'Hidden'}
+                          </button>
                         </td>
                         <td className="px-5 py-3.5">
                           <div className="flex items-center gap-2">

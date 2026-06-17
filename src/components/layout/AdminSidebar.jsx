@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard, Package, ShoppingBag, Tag, Users,
+  LayoutDashboard, Package, ShoppingBag, Tag, CreditCard,
   BarChart2, Settings, LogOut
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
@@ -9,10 +9,8 @@ const links = [
   { to: '/admin/dashboard', label: 'Dashboard', Icon: LayoutDashboard, end: true },
   { to: '/admin/products', label: 'Products', Icon: Package },
   { to: '/admin/orders', label: 'Orders', Icon: ShoppingBag },
+  { to: '/admin/payments', label: 'Payments', Icon: CreditCard },
   { to: '/admin/sales', label: 'Sales', Icon: Tag },
-  { to: '/admin/customers', label: 'Customers', Icon: Users },
-  { to: '/admin/reports', label: 'Reports', Icon: BarChart2 },
-  { to: '/admin/settings', label: 'Settings', Icon: Settings },
 ];
 
 export default function AdminSidebar() {

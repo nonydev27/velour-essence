@@ -24,12 +24,20 @@ async function initializePayment(req, res, next) {
     // Unique reference for this transaction
     const reference = `VE-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
 
+    const callbackUrl = `${process.env.CLIENT_URL}/order-confirmation`;
+
     const { authorizationUrl } = await initializeTransaction({
       email,
       amountKobo: Math.round(parseFloat(totalAmount) * 100),
       reference,
+      callbackUrl,
       metadata: { customerName, phone, school, hostel, items: JSON.stringify(items) },
     });
+
+    // Record the pending payment attempt for admin visibility
+    await prisma.payment.create({
+      data: { reference, customerName, phone, amount: parseFloat(totalAmount), status: 'PENDING' },
+    }).catch(() => {});
 
     res.json({ success: true, authorizationUrl, reference });
   } catch (err) {
@@ -87,6 +95,13 @@ async function verifyPayment(req, res, next) {
       }
     }
 
+    // Mark payment as SUCCESS and link to order
+    await prisma.payment.upsert({
+      where: { reference },
+      update: { status: 'SUCCESS', orderId: order.orderId },
+      create: { reference, customerName: meta.customerName || 'Customer', phone: meta.phone || '', amount: txData.amount / 100, status: 'SUCCESS', orderId: order.orderId },
+    }).catch(() => {});
+
     // Fire-and-forget SMS
     sendOrderConfirmationSMS(order).catch(() => {});
 
@@ -102,9 +117,10 @@ async function verifyPayment(req, res, next) {
  */
 async function handleWebhook(req, res, next) {
   try {
+    // req.body is a raw Buffer here (express.raw middleware set in app.js)
     const hash = crypto
       .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
-      .update(JSON.stringify(req.body))
+      .update(req.body)
       .digest('hex');
 
     if (hash !== req.headers['x-paystack-signature']) {
@@ -114,7 +130,7 @@ async function handleWebhook(req, res, next) {
     // Acknowledge immediately
     res.sendStatus(200);
 
-    const event = req.body;
+    const event = JSON.parse(req.body);
     if (event.event !== 'charge.success') return;
 
     const txData = event.data;
@@ -148,6 +164,13 @@ async function handleWebhook(req, res, next) {
         }).catch(() => {});
       }
     }
+
+    // Mark payment as SUCCESS via webhook path
+    await prisma.payment.upsert({
+      where: { reference },
+      update: { status: 'SUCCESS', orderId: order.orderId },
+      create: { reference, customerName: meta.customerName || 'Customer', phone: meta.phone || '', amount: txData.amount / 100, status: 'SUCCESS', orderId: order.orderId },
+    }).catch(() => {});
 
     sendOrderConfirmationSMS(order).catch(() => {});
   } catch (err) {

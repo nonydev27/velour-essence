@@ -209,6 +209,8 @@ Every time you change your schema, run a new migration:
 npx prisma migrate dev --name describe_what_changed
 ```
 
+**If you just cloned or pulled this repo**, check `TODO.md` under "Pending migrations" for any migrations that haven't been run yet, and run them before starting the server.
+
 **To view your database visually** (very useful while building):
 ```bash
 npx prisma studio
@@ -225,13 +227,15 @@ This opens a browser UI at `http://localhost:5555` where you can see and edit yo
 3. Copy all three into your `.env`
 
 #### Paystack (payments)
-1. Sign up at https://paystack.com (free)
+1. Sign up at https://paystack.com (free) — use paystack.com/gh for a Ghanaian account
 2. In your dashboard, go to **Settings → API Keys & Webhooks**
-3. Copy your **Test Secret Key** and **Test Public Key** into `.env`
+3. Copy your **Test Secret Key** and **Test Public Key** into `server/.env`
    - Use **Test keys** while building — no real money moves
-   - Switch to **Live keys** when you're ready to go live
-4. Set your webhook URL (after you deploy the backend):
+   - Switch to **Live keys** when ready (see `TODO.md` for the full go-live checklist)
+4. Enable GHS currency: **Settings → Preferences → Accepted Currencies → Ghana Cedi**
+5. Set your webhook URL (after you deploy the backend):
    `https://your-backend-url.com/api/payment/webhook`
+6. Update `CLIENT_URL` in `server/.env` to your deployed frontend URL so the Paystack callback redirects correctly
 
 #### Termii (SMS)
 1. Sign up at https://termii.com

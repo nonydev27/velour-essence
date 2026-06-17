@@ -9,9 +9,10 @@ const { uploadImage, deleteImage } = require('../services/cloudinaryService');
  */
 async function getProducts(req, res, next) {
   try {
-    const { category, featured, search } = req.query;
+    const { category, featured, search, admin } = req.query;
 
-    const where = {};
+    // Admin can see all products; public only sees visible ones
+    const where = admin === 'true' ? {} : { isVisible: true };
     if (category) where.category = category;
     if (featured === 'true') where.isFeatured = true;
     if (search) {
@@ -44,7 +45,7 @@ async function getProductById(req, res, next) {
       include: { promotionalSales: { where: { isActive: true } } },
     });
 
-    if (!product) {
+    if (!product || !product.isVisible) {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
 
@@ -60,7 +61,7 @@ async function getProductById(req, res, next) {
  */
 async function createProduct(req, res, next) {
   try {
-    const { name, description, price, category, stock, isFeatured, discount } = req.body;
+    const { name, description, price, category, stock, isFeatured, isVisible, discount } = req.body;
 
     if (!name || !description || !price || !category) {
       return res.status(400).json({ success: false, message: 'name, description, price, and category are required' });
@@ -82,6 +83,7 @@ async function createProduct(req, res, next) {
         category,
         stock: parseInt(stock) || 0,
         isFeatured: isFeatured === 'true' || isFeatured === true,
+        isVisible: isVisible === undefined ? true : (isVisible === 'true' || isVisible === true),
         discount: parseInt(discount) || 0,
       },
     });
@@ -98,7 +100,7 @@ async function createProduct(req, res, next) {
  */
 async function updateProduct(req, res, next) {
   try {
-    const { name, description, price, category, stock, isFeatured, discount } = req.body;
+    const { name, description, price, category, stock, isFeatured, isVisible, discount } = req.body;
 
     const existing = await prisma.product.findUnique({ where: { id: req.params.id } });
     if (!existing) {
@@ -124,6 +126,7 @@ async function updateProduct(req, res, next) {
         ...(category && { category }),
         ...(stock !== undefined && { stock: parseInt(stock) }),
         ...(isFeatured !== undefined && { isFeatured: isFeatured === 'true' || isFeatured === true }),
+        ...(isVisible !== undefined && { isVisible: isVisible === 'true' || isVisible === true }),
         ...(discount !== undefined && { discount: parseInt(discount) }),
         images,
       },
@@ -154,4 +157,26 @@ async function deleteProduct(req, res, next) {
   }
 }
 
-module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct };
+/**
+ * PATCH /api/products/:id/visibility
+ * Admin — toggle product visibility on/off
+ */
+async function toggleProductVisibility(req, res, next) {
+  try {
+    const existing = await prisma.product.findUnique({ where: { id: req.params.id } });
+    if (!existing) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    const product = await prisma.product.update({
+      where: { id: req.params.id },
+      data: { isVisible: !existing.isVisible },
+    });
+
+    res.json({ success: true, data: product });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct, toggleProductVisibility };

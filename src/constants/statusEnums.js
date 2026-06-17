@@ -5,4 +5,5 @@ export const STATUS_COLORS = {
   CONFIRMED: 'bg-blue-100 text-blue-800',
   DELIVERED: 'bg-green-100 text-green-800',
 };
-export const PRODUCT_CATEGORIES = ['Oud', 'Floral', 'Woody', 'Fresh', 'Oriental', 'Citrus', 'Musk', 'Gourmand'];
+export const PRODUCT_CATEGORIES = [
+ 'All Perfumes', 'Women', 'Men', 'Unisex', 'Best Sellers', 'New Arrivals', 'Oud', 'Floral', 'Woody', 'Fresh', 'Oriental'];

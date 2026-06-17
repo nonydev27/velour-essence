@@ -2,7 +2,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Eye, EyeOff } from 'lucide-react';
 import AdminSidebar from '../../components/layout/AdminSidebar';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
@@ -18,6 +18,7 @@ const schema = z.object({
   stock: z.coerce.number().int().nonnegative('Stock cannot be negative'),
   discount: z.coerce.number().int().min(0).max(100),
   isFeatured: z.boolean().optional(),
+  isVisible: z.boolean().optional(),
 });
 
 export default function AddProductPage() {
@@ -25,10 +26,11 @@ export default function AddProductPage() {
   const toast = useToast();
   const { mutate: createProduct, isPending } = useCreateProduct();
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { stock: 0, discount: 0, isFeatured: false },
+    defaultValues: { stock: 0, discount: 0, isFeatured: false, isVisible: true },
   });
+  const isVisible = watch('isVisible');
 
   function onSubmit(data) {
     const formData = new FormData();
@@ -92,6 +94,21 @@ export default function AddProductPage() {
             <input type="checkbox" className="rounded border-border" {...register('isFeatured')} />
             Featured product (shows on homepage)
           </label>
+
+          {/* Visibility toggle */}
+          <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+            <div>
+              <p className="text-sm font-medium text-charcoal">Visible to customers</p>
+              <p className="text-xs text-warm-gray mt-0.5">When off, this product is hidden from the shop</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setValue('isVisible', !isVisible)}
+              className={`relative w-11 h-6 rounded-full transition-colors ${isVisible ? 'bg-charcoal' : 'bg-border'}`}
+            >
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${isVisible ? 'translate-x-5' : 'translate-x-0'}`} />
+            </button>
+          </div>
 
           <div className="flex flex-col gap-1">
             <label className="text-xs font-semibold text-warm-gray uppercase tracking-wider">Product Images</label>

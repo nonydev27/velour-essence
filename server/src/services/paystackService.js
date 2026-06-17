@@ -11,15 +11,16 @@ const headers = () => ({
  * Initialize a Paystack transaction
  * @param {object} params
  * @param {string} params.email
- * @param {number} params.amountKobo - Amount in kobo (Naira × 100)
+ * @param {number} params.amountPesewas - Amount in pesewas (GHS × 100)
  * @param {string} params.reference - Unique transaction reference
+ * @param {string} params.callbackUrl - URL Paystack redirects to after payment
  * @param {object} params.metadata - Additional metadata to attach
  * @returns {Promise<{authorizationUrl: string, reference: string}>}
  */
-async function initializeTransaction({ email, amountKobo, reference, metadata = {} }) {
+async function initializeTransaction({ email, amountKobo: amountPesewas, reference, callbackUrl, metadata = {} }) {
   const { data } = await axios.post(
     `${PAYSTACK_BASE}/transaction/initialize`,
-    { email, amount: amountKobo, reference, metadata },
+    { email, amount: amountPesewas, reference, callback_url: callbackUrl, metadata, currency: 'GHS' },
     { headers: headers() }
   );
 

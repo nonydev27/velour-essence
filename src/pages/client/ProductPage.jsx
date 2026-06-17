@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Clock, Package, Minus, Plus, Star } from 'lucide-react';
@@ -10,7 +10,6 @@ import { useCart, toCartItem } from '../../hooks/useCart';
 import { useToast } from '../../components/ui/Toast';
 import { formatPrice, discountedPrice } from '../../utils/formatPrice';
 
-const SIZES = ['50ml', '100ml'];
 const BADGES = [
   { Icon: Clock,      label: 'Long Lasting' },
   { Icon: ShieldCheck, label: 'Premium Quality' },
@@ -22,9 +21,9 @@ export default function ProductPage() {
   const { data: product, isLoading } = useProduct(id);
   const { addItem } = useCart();
   const toast = useToast();
+  const navigate = useNavigate();
 
   const [imgIdx, setImgIdx] = useState(0);
-  const [size, setSize] = useState('50ml');
   const [qty, setQty] = useState(1);
 
   if (isLoading) {
@@ -46,12 +45,14 @@ export default function ProductPage() {
 
   function handleAdd() {
     if (outOfStock) return;
-    for (let i = 0; i < qty; i++) addItem(toCartItem(product));
+    addItem(toCartItem(product), qty);
     toast(`${product.name} added to cart`, 'success');
   }
 
   function handleBuyNow() {
-    handleAdd();
+    if (outOfStock) return;
+    addItem(toCartItem(product), qty);
+    navigate('/checkout');
   }
 
   return (
@@ -123,26 +124,6 @@ export default function ProductPage() {
             </div>
 
             <p className="text-warm-gray text-sm leading-relaxed">{product.description}</p>
-
-            {/* Size */}
-            <div>
-              <p className="text-xs font-semibold text-charcoal uppercase tracking-wider mb-2">Size</p>
-              <div className="flex gap-2">
-                {SIZES.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setSize(s)}
-                    className={`px-5 py-2 rounded-lg border text-sm font-medium transition-colors ${
-                      size === s
-                        ? 'border-charcoal bg-charcoal text-white'
-                        : 'border-border text-charcoal hover:border-charcoal'
-                    }`}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            </div>
 
             {/* Quantity */}
             <div>

@@ -19,6 +19,7 @@ import AddProductPage from '../pages/admin/AddProductPage';
 import EditProductPage from '../pages/admin/EditProductPage';
 import OrdersPage from '../pages/admin/OrdersPage';
 import SalesPage from '../pages/admin/SalesPage';
+import PaymentsPage from '../pages/admin/PaymentsPage';
 
 export default function AppRouter() {
   return (
@@ -45,6 +46,7 @@ export default function AppRouter() {
           <Route path="products/add" element={<AddProductPage />} />
           <Route path="products/edit/:id" element={<EditProductPage />} />
           <Route path="orders" element={<OrdersPage />} />
+          <Route path="payments" element={<PaymentsPage />} />
           <Route path="sales" element={<SalesPage />} />
         </Route>
 

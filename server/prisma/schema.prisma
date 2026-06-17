@@ -37,6 +37,7 @@ model Product {
   category    String   // e.g., "Oud", "Floral", "Woody"
   stock       Int      @default(0)
   isFeatured  Boolean  @default(false)
+  isVisible   Boolean  @default(true)  // Controls whether product appears on the client shop
   discount    Int      @default(0) // Percentage discount (0-100)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -58,6 +59,18 @@ model Order {
   paystackRef  String      @unique              // Unique transaction reference from Paystack
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+}
+
+model Payment {
+  id           String   @id @default(uuid())
+  reference    String   @unique              // Paystack transaction reference
+  customerName String
+  phone        String
+  amount       Float                         // Amount in GHS
+  status       String   @default("PENDING") // PENDING | SUCCESS
+  orderId      String?                       // Populated once payment is confirmed
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Sale {

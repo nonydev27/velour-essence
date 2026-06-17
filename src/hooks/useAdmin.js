@@ -47,3 +47,12 @@ export function useDeleteSale() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['sales'] }),
   });
 }
+
+// Polls every 10 seconds so the admin sees new payments as they come in
+export function usePayments(params) {
+  return useQuery({
+    queryKey: ['payments', params],
+    queryFn: () => adminService.getPayments(params),
+    refetchInterval: 10_000,
+  });
+}

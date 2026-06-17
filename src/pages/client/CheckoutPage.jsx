@@ -14,7 +14,7 @@ const DELIVERY_FEE = 1500;
 
 const schema = z.object({
   customerName: z.string().min(2, 'Full name required'),
-  phone: z.string().regex(/^0[789][01]\d{8}$/, 'Enter a valid Nigerian number (e.g. 08012345678)'),
+  phone: z.string().regex(/^0[2356]\d{8}$/, 'Enter a valid Ghanaian number (e.g. 0241234567)'),
   school: z.string().min(1, 'Select your school'),
   hostel: z.string().min(2, 'Enter your hostel / address'),
 });
@@ -93,7 +93,7 @@ export default function CheckoutPage() {
                 <div className="flex flex-col gap-1">
                   <label className="text-xs font-medium text-charcoal">Phone Number</label>
                   <input
-                    placeholder="08123456789"
+                    placeholder="0241234567"
                     className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-charcoal ${errors.phone ? 'border-error' : 'border-border'}`}
                     {...register('phone')}
                   />

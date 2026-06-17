@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom';
-import { ShoppingCart, Search, User, Menu, X } from 'lucide-react';
+import { ShoppingCart, User, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '../../hooks/useCart';
 
@@ -43,12 +43,8 @@ export default function Navbar() {
 
         {/* Right icons */}
         <div className="flex items-center gap-1">
-          <button className="p-2 rounded-lg hover:bg-cream transition-colors" aria-label="Search">
-            <Search size={20} className="text-charcoal" />
-          </button>
-          <button className="p-2 rounded-lg hover:bg-cream transition-colors" aria-label="Account">
-            <User size={20} className="text-charcoal" />
-          </button>
+         
+        
           <button
             onClick={openCart}
             className="relative p-2 rounded-lg hover:bg-cream transition-colors"

@@ -8,6 +8,14 @@ export function useProducts(params) {
   });
 }
 
+// Admin version — returns ALL products including hidden ones
+export function useProductsAdmin() {
+  return useQuery({
+    queryKey: ['products', 'admin'],
+    queryFn: () => productService.getAllAdmin(),
+  });
+}
+
 export function useProduct(id) {
   return useQuery({
     queryKey: ['product', id],
@@ -39,6 +47,14 @@ export function useDeleteProduct() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id) => productService.delete(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['products'] }),
+  });
+}
+
+export function useToggleProductVisibility() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => productService.toggleVisibility(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['products'] }),
   });
 }

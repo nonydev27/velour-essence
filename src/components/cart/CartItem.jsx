@@ -19,7 +19,6 @@ export default function CartItem({ item }) {
       </div>
       <div className="flex-1 min-w-0">
         <h4 className="text-sm font-medium text-charcoal line-clamp-1">{item.name}</h4>
-        <p className="text-xs text-warm-gray">50ml</p>
         <p className="text-sm font-semibold text-charcoal mt-1">{formatPrice(price)}</p>
       </div>
       <div className="flex flex-col items-end justify-between shrink-0">

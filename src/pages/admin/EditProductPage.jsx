@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useEffect } from 'react';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Eye, EyeOff } from 'lucide-react';
 import AdminSidebar from '../../components/layout/AdminSidebar';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
@@ -20,6 +20,7 @@ const schema = z.object({
   stock: z.coerce.number().int().nonnegative(),
   discount: z.coerce.number().int().min(0).max(100),
   isFeatured: z.boolean().optional(),
+  isVisible: z.boolean().optional(),
 });
 
 export default function EditProductPage() {
@@ -29,7 +30,8 @@ export default function EditProductPage() {
   const { data: product, isLoading } = useProduct(id);
   const { mutate: updateProduct, isPending } = useUpdateProduct();
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
+  const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm({ resolver: zodResolver(schema) });
+  const isVisible = watch('isVisible');
 
   useEffect(() => {
     if (product) {
@@ -41,6 +43,7 @@ export default function EditProductPage() {
         stock: product.stock,
         discount: product.discount,
         isFeatured: product.isFeatured,
+        isVisible: product.isVisible ?? true,
       });
     }
   }, [product]);
@@ -103,6 +106,21 @@ export default function EditProductPage() {
             <input type="checkbox" className="rounded border-border" {...register('isFeatured')} />
             Featured product
           </label>
+
+          {/* Visibility toggle */}
+          <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+            <div>
+              <p className="text-sm font-medium text-charcoal">Visible to customers</p>
+              <p className="text-xs text-warm-gray mt-0.5">When off, this product is hidden from the shop</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setValue('isVisible', !isVisible)}
+              className={`relative w-11 h-6 rounded-full transition-colors ${isVisible ? 'bg-charcoal' : 'bg-border'}`}
+            >
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${isVisible ? 'translate-x-5' : 'translate-x-0'}`} />
+            </button>
+          </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs font-semibold text-warm-gray uppercase tracking-wider">Replace Images (optional)</label>
             <input id="images-input" type="file" multiple accept="image/*" className="text-sm text-warm-gray file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-cream file:text-charcoal file:text-xs file:font-medium" />
