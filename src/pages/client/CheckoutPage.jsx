@@ -10,8 +10,6 @@ import { useToast } from '../../components/ui/Toast';
 import { formatPrice } from '../../utils/formatPrice';
 import { SCHOOLS } from '../../constants/schools';
 
-const DELIVERY_FEE = 1500;
-
 const schema = z.object({
   customerName: z.string().min(2, 'Full name required'),
   phone: z.string().regex(/^0[2356]\d{8}$/, 'Enter a valid Ghanaian number (e.g. 0241234567)'),
@@ -32,8 +30,6 @@ export default function CheckoutPage() {
 
   if (items.length === 0) return <Navigate to="/cart" replace />;
 
-  const grandTotal = totalPrice + DELIVERY_FEE;
-
   async function onSubmit(data) {
     setLoading(true);
     try {
@@ -47,7 +43,7 @@ export default function CheckoutPage() {
       const { authorizationUrl, reference } = await paymentService.initialize({
         ...data,
         items: cartItems,
-        totalAmount: grandTotal,
+        totalAmount: totalPrice,
       });
 
       sessionStorage.setItem('ve_paystack_ref', reference);
@@ -148,7 +144,7 @@ export default function CheckoutPage() {
           </div>
 
           {/* ── Right: Order Summary ─────────────────────────────── */}
-          <div>
+          <div className="sticky top-6 self-start">
             <h2 className="text-lg font-serif text-charcoal mb-6">Order Summary</h2>
             <div className="bg-white border border-border rounded-xl p-5 space-y-3">
               {items.map((item) => (
@@ -170,18 +166,10 @@ export default function CheckoutPage() {
                 </div>
               ))}
 
-              <div className="border-t border-border pt-3 space-y-2">
-                <div className="flex justify-between text-sm text-warm-gray">
-                  <span>Subtotal</span>
-                  <span>{formatPrice(totalPrice)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-warm-gray">
-                  <span>Delivery Fee</span>
-                  <span>{formatPrice(DELIVERY_FEE)}</span>
-                </div>
-                <div className="flex justify-between font-semibold text-charcoal text-sm border-t border-border pt-2">
+              <div className="border-t border-border pt-3">
+                <div className="flex justify-between font-semibold text-charcoal text-sm">
                   <span>Total</span>
-                  <span>{formatPrice(grandTotal)}</span>
+                  <span>{formatPrice(totalPrice)}</span>
                 </div>
               </div>
 
@@ -191,7 +179,7 @@ export default function CheckoutPage() {
                 disabled={loading}
                 className="w-full py-3 rounded-lg bg-charcoal text-white font-medium text-sm hover:bg-burgundy transition-colors disabled:opacity-60 mt-2"
               >
-                {loading ? 'Processing...' : `Pay ${formatPrice(grandTotal)}`}
+                {loading ? 'Processing...' : `Pay ${formatPrice(totalPrice)}`}
               </button>
             </div>
           </div>
