@@ -3,6 +3,7 @@ const crypto = require('crypto');
 
 const { initializeTransaction, verifyTransaction } = require('../services/paystackService');
 const { sendOrderConfirmationSMS } = require('../services/smsService');
+const { sendOrderNotification } = require('../services/emailService');
 const { generateOrderId } = require('../utils/generateOrderId');
 
 
@@ -102,8 +103,9 @@ async function verifyPayment(req, res, next) {
       create: { reference, customerName: meta.customerName || 'Customer', phone: meta.phone || '', amount: txData.amount / 100, status: 'SUCCESS', orderId: order.orderId },
     }).catch(() => {});
 
-    // Fire-and-forget SMS
+    // Fire-and-forget notifications
     sendOrderConfirmationSMS(order).catch(() => {});
+    sendOrderNotification(order).catch(() => {});
 
     res.json({ success: true, data: order });
   } catch (err) {
@@ -173,6 +175,7 @@ async function handleWebhook(req, res, next) {
     }).catch(() => {});
 
     sendOrderConfirmationSMS(order).catch(() => {});
+    sendOrderNotification(order).catch(() => {});
   } catch (err) {
     console.error('Webhook error:', err);
   }
