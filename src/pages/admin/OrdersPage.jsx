@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, X, Phone, MapPin, School, Package } from 'lucide-react';
+import { Eye, X, Phone, MapPin, School, Package, FileText } from 'lucide-react';
 import AdminSidebar from '../../components/layout/AdminSidebar';
 import Spinner from '../../components/ui/Spinner';
 import Badge from '../../components/ui/Badge';
@@ -10,6 +10,95 @@ import { formatDate } from '../../utils/formatDate';
 import { STATUS_COLORS, STATUS_LABELS, ORDER_STATUS } from '../../constants/statusEnums';
 
 const nextStatus = { PENDING: 'CONFIRMED', CONFIRMED: 'DELIVERED', DELIVERED: null };
+
+function DescriptionModal({ order, onClose }) {
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[85vh] overflow-y-auto">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border sticky top-0 bg-white rounded-t-2xl z-10">
+          <div className="flex items-center gap-2">
+            <FileText size={16} className="text-warm-gray" />
+            <p className="font-semibold text-charcoal text-sm">Order Description</p>
+          </div>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-cream text-warm-gray hover:text-charcoal transition-colors">
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5">
+          {/* Order ID + status */}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-warm-gray">Order ID</p>
+              <p className="font-semibold text-burgundy">{order.orderId}</p>
+            </div>
+            <Badge className={STATUS_COLORS[order.status]}>{STATUS_LABELS[order.status]}</Badge>
+          </div>
+
+          {/* Customer details */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-warm-gray mb-2">Customer Details</p>
+            <div className="bg-cream/50 rounded-xl p-4 text-sm space-y-1.5">
+              <p className="font-medium text-charcoal">{order.customerName}</p>
+              <p className="text-warm-gray">{order.phone}</p>
+              <p className="text-warm-gray">{order.school}</p>
+              <p className="text-warm-gray">{order.hostel}</p>
+            </div>
+          </div>
+
+          {/* Items description */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-warm-gray mb-2">
+              Items ({items.length})
+            </p>
+            {items.length === 0 ? (
+              <p className="text-sm text-warm-gray italic">No item details available.</p>
+            ) : (
+              <div className="space-y-2.5">
+                {items.map((item, i) => (
+                  <div key={i} className="flex items-start gap-3 p-3 bg-[#f4f5f7] rounded-xl">
+                    <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shrink-0 shadow-sm">
+                      <Package size={14} className="text-warm-gray" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-charcoal">{item.name}</p>
+                      <p className="text-xs text-warm-gray mt-0.5">
+                        {item.qty} × {formatPrice(item.price)}
+                        <span className="mx-1.5 text-border">·</span>
+                        Subtotal: <span className="font-semibold text-charcoal">{formatPrice(item.qty * item.price)}</span>
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Total + date */}
+          <div className="bg-charcoal text-white rounded-xl p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs text-white/60">Total Paid</p>
+              <p className="text-xl font-semibold">{formatPrice(order.totalAmount)}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-white/60">Date Placed</p>
+              <p className="text-sm">{formatDate(order.createdAt)}</p>
+            </div>
+          </div>
+
+          {/* Payment ref */}
+          <p className="text-xs text-warm-gray">
+            <span className="font-medium">Paystack Ref:</span>{' '}
+            <span className="font-mono">{order.paystackRef}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function OrderModal({ order, onClose, onStatusChange }) {
   const items = Array.isArray(order.items) ? order.items : [];
@@ -124,6 +213,7 @@ function OrderModal({ order, onClose, onStatusChange }) {
 export default function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [descOrder, setDescOrder] = useState(null);
 
   const { data, isLoading } = useOrders(
     statusFilter ? { status: statusFilter } : {},
@@ -205,9 +295,17 @@ export default function OrdersPage() {
                             <button
                               onClick={() => setSelectedOrder(order)}
                               className="p-1.5 rounded hover:bg-cream text-warm-gray hover:text-charcoal transition-colors"
-                              title="View details"
+                              title="View order details"
                             >
                               <Eye size={15} />
+                            </button>
+                            <button
+                              onClick={() => setDescOrder(order)}
+                              className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border border-border bg-white text-charcoal hover:bg-cream transition-colors"
+                              title="View full order description"
+                            >
+                              <FileText size={12} />
+                              Description
                             </button>
                             {next && (
                               <button
@@ -240,6 +338,13 @@ export default function OrdersPage() {
           order={selectedOrder}
           onClose={() => setSelectedOrder(null)}
           onStatusChange={handleStatus}
+        />
+      )}
+
+      {descOrder && (
+        <DescriptionModal
+          order={descOrder}
+          onClose={() => setDescOrder(null)}
         />
       )}
     </div>

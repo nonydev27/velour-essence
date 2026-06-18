@@ -1,6 +1,7 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
 import CartDrawer from '../cart/CartDrawer';
+import WhatsAppChat from '../ui/WhatsAppChat';
 
 export default function PageWrapper({ children }) {
   return (
@@ -9,6 +10,7 @@ export default function PageWrapper({ children }) {
       <main className="flex-1">{children}</main>
       <Footer />
       <CartDrawer />
+      <WhatsAppChat />
     </div>
   );
 }

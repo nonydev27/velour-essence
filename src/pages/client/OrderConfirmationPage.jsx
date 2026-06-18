@@ -81,12 +81,12 @@ export default function OrderConfirmationPage() {
             >
               Continue Shopping
             </Link>
-            <Link
+            {/* <Link
               to="/shop"
               className="px-6 py-2.5 rounded-lg border border-white/30 text-white text-sm font-medium hover:bg-white/10 transition-colors"
             >
               Track Your Order
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
