@@ -17,6 +17,16 @@ export function useAdminLogin() {
   });
 }
 
+// Public hook — no auth required, used on client-facing pages
+export function useActiveSales() {
+  return useQuery({
+    queryKey: ['sales', 'active'],
+    queryFn: adminService.getActiveSales,
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+  });
+}
+
 export function useSales() {
   return useQuery({
     queryKey: ['sales'],

@@ -17,11 +17,11 @@ const team = [
   },
   {
     name: 'Karl Djansi',
-    role: 'Co-Founder & Head of Operations',
+    role: 'Software Engineer & Operations Lead',
     image: '/kdjansi.jpg',
     phone: '+233 20 738 4908',
     email: 'karl@velouressence.com',
-    bio: 'Karl co-founded Velour Essence to redefine how Ghanaians experience luxury scents. His operational expertise and deep understanding of supply chain management have been instrumental in building a seamless, customer-first experience.',
+    bio: 'Karl is the technical mastermind behind our seamless online experience. With a background in computer science and a passion for innovation, he ensures that our website is not only beautiful but also fast, secure, and user-friendly.',
     school: 'Kwame Nkrumah University of Science and Technology',
     degree: 'B.Sc. Computer Science',
     achievement: 'Young Entrepreneur of the Year – Ghana Business Awards 2023',

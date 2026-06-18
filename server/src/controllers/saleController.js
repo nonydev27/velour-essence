@@ -1,6 +1,21 @@
 const { prisma } = require('../utils/prisma');
 
-
+// Public — returns only active sales within their date window
+async function getActiveSales(req, res, next) {
+  try {
+    const now = new Date();
+    const sales = await prisma.sale.findMany({
+      where: {
+        isActive: true,
+        startDate: { lte: now },
+        endDate:   { gte: now },
+      },
+      include: { product: { select: { id: true, name: true, price: true } } },
+      orderBy: { discountPercent: 'desc' },
+    });
+    res.json({ success: true, data: sales });
+  } catch (err) { next(err); }
+}
 
 async function getSales(req, res, next) {
   try {
@@ -53,4 +68,4 @@ async function deleteSale(req, res, next) {
   } catch (err) { next(err); }
 }
 
-module.exports = { getSales, createSale, toggleSale, deleteSale };
+module.exports = { getActiveSales, getSales, createSale, toggleSale, deleteSale };
