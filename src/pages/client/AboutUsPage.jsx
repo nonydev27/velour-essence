@@ -25,7 +25,7 @@ const team = [
     school: 'Kwame Nkrumah University of Science and Technology',
     degree: 'B.Sc. Computer Science',
     achievement: 'Young Entrepreneur of the Year – Ghana Business Awards 2023',
-    tag: 'Co-Founder',
+    tag: 'Software Engineer & Operations Lead',
   },
 ];
 
