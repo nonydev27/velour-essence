@@ -23,7 +23,7 @@ export default function Footer() {
         <div>
           <h4 className="text-white text-xs font-semibold uppercase tracking-wider mb-4">Support</h4>
           <ul className="space-y-2 text-sm">
-            <li>WhatsApp: +233 55 964 6969'</li>
+            <li>WhatsApp: +233 55 964 6969</li>
             <li>delademprempeh5@gmail.com</li>
             <li>Mon–Sat, 9am–6pm</li>
           </ul>

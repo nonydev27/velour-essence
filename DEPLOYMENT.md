@@ -13,7 +13,7 @@ velour-essence/          ← push this whole thing to GitHub
 ├── index.html
 ├── vite.config.js
 ├── package.json
-└── server/              ← Express backend (deployed to Railway)
+└── server/              ← Express backend (deployed to Render)
     ├── index.js
     ├── prisma/
     ├── src/
@@ -27,19 +27,19 @@ velour-essence/          ← push this whole thing to GitHub
 | What | Service | Free tier |
 |---|---|---|
 | Frontend hosting | Vercel | Yes, generous |
-| Backend hosting | Railway | $5/month hobby plan (no free tier anymore) |
+| Backend hosting | Render | Yes — free tier, spins down after 15 min inactivity |
 | Database | Supabase | Yes — 500MB, 2 projects |
 | Image uploads | Cloudinary | Yes — 25GB storage |
 | Payments | Paystack | Free, takes % per transaction |
 | SMS | Termii | Pay-as-you-go credits |
 
-> **Railway no longer has a free tier** as of 2024. It costs ~$5/month for the Hobby plan. Alternatively use **Render** (free tier available, but spins down after 15 min of inactivity) or **Fly.io** (free tier, more setup). Railway is the easiest and recommended.
+> **Render's free tier** spins down after 15 minutes of inactivity — the first request after idle takes ~30 seconds to wake up. This is fine for a store that gets regular traffic. Upgrade to the $7/month Starter plan to keep it always-on.
 
 ---
 
 ## Part 1 — GitHub
 
-Everything starts here. Both Vercel and Railway pull your code from GitHub.
+Everything starts here. Both Vercel and Render pull your code from GitHub.
 
 1. Create a repo at **github.com/new** — name it `velour-essence`, set it to **Private**
 2. In your terminal:
@@ -100,31 +100,32 @@ ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "isVisible" BOOLEAN NOT NULL DEFA
 
 ---
 
-## Part 3 — Railway (Backend / Express API)
+## Part 3 — Render (Backend / Express API)
 
 ### 3.1 Create an account
-Go to **railway.app** → sign up with GitHub
+Go to **render.com** → sign up with GitHub
 
-### 3.2 Create a new project
-1. **New Project** → **Deploy from GitHub repo**
-2. Select your `velour-essence` repo
-3. Railway will detect it and start a deployment — **cancel it immediately** (it'll try to deploy the frontend by mistake)
+### 3.2 Create a new Web Service
+1. **New** → **Web Service**
+2. Connect your GitHub account if prompted → select your `velour-essence` repo
+3. Configure the service:
 
-### 3.3 Configure the service
-Click the service → **Settings** tab:
+| Setting | Value |
+|---|---|
+| **Name** | `velour-essence-api` |
+| **Root Directory** | `server` |
+| **Runtime** | `Node` |
+| **Build Command** | `npm install` |
+| **Start Command** | `npx prisma migrate deploy && npm start` |
+| **Instance Type** | `Free` |
 
-- **Root Directory**: `server`
-- **Build Command**: _(leave blank — Railway runs `npm install` automatically)_
-- **Start Command**: `npx prisma migrate deploy && npm start`
+> `prisma migrate deploy` runs pending migrations before the server starts. It's a no-op if nothing has changed.
 
-> `prisma migrate deploy` runs any pending migrations before the server starts. It's safe to run on every deploy — it's a no-op if nothing has changed.
-
-### 3.4 Add environment variables
-Click the **Variables** tab → **Raw Editor** → paste this and fill in your values:
+### 3.3 Add environment variables
+Scroll down to **Environment Variables** → add each one:
 
 ```
 DATABASE_URL=postgresql://postgres.xxxx:[password]@aws-1-eu-north-1.pooler.supabase.com:5432/postgres
-DIRECT_URL=postgresql://postgres:[password]@db.xxxx.supabase.co:5432/postgres
 PORT=5000
 JWT_SECRET=pick-a-long-random-string-at-least-32-characters
 CLOUDINARY_CLOUD_NAME=your-cloud-name
@@ -139,20 +140,22 @@ CLIENT_URL=https://your-vercel-url.vercel.app
 
 > Leave `CLIENT_URL` as a placeholder for now — fill it in after Part 4.
 
-### 3.5 Deploy
-Click **Deploy** → watch the logs. A successful deploy ends with:
+### 3.4 Deploy
+Click **Create Web Service** → Render builds and deploys. Watch the logs in the **Logs** tab. A successful deploy ends with:
 ```
 Server running on port 5000
 ```
 
-### 3.6 Get your backend URL
-Settings → **Networking** → **Public Networking** → **Generate Domain**  
-You'll get something like: `https://velour-essence-production.up.railway.app`  
+### 3.5 Get your backend URL
+Render gives you a URL at the top of the service page:  
+`https://velour-essence-api.onrender.com`  
 **Save this URL.**
 
-### 3.7 Test it
-Open in browser: `https://velour-essence-production.up.railway.app/health`  
-Should return: `{"status":"ok"}`
+### 3.6 Test it
+Open in browser: `https://velour-essence-api.onrender.com/health`  
+Should return: `{"status":"ok"}`  
+
+> If it takes ~30 seconds to respond, the service woke up from idle — that's normal on the free tier.
 
 ---
 
@@ -174,7 +177,7 @@ Before clicking Deploy, add these under **Environment Variables**:
 
 | Name | Value |
 |---|---|
-| `VITE_API_URL` | `https://velour-essence-production.up.railway.app` |
+| `VITE_API_URL` | `https://velour-essence-api.onrender.com` |
 | `VITE_PAYSTACK_PUBLIC_KEY` | `pk_live_...` |
 
 ### 4.4 Deploy
@@ -189,25 +192,25 @@ Open the URL — your shop should load. Products won't show yet (no data in the 
 
 ## Part 5 — Wire Everything Together
 
-### 5.1 Update Railway with your Vercel URL
-1. Go to Railway → your service → **Variables**
+### 5.1 Update Render with your Vercel URL
+1. Go to Render → your service → **Environment**
 2. Update `CLIENT_URL` to your actual Vercel URL:
    ```
    CLIENT_URL=https://velour-essence.vercel.app
    ```
-3. Railway redeploys automatically
+3. Click **Save Changes** — Render redeploys automatically
 
 ### 5.2 Set Paystack Webhook URL
 1. Go to **dashboard.paystack.com** → Settings → API Keys & Webhooks
 2. Set Webhook URL to:
    ```
-   https://velour-essence-production.up.railway.app/api/payment/webhook
+   https://velour-essence-api.onrender.com/api/payment/webhook
    ```
 
 ### 5.3 Seed your admin account
 Run this once to create your admin login:
 ```bash
-curl -X POST https://velour-essence-production.up.railway.app/api/admin/seed \
+curl -X POST https://velour-essence-api.onrender.com/api/admin/seed \
   -H "Content-Type: application/json" \
   -d '{"email":"your@email.com","password":"your-admin-password"}'
 ```
@@ -229,14 +232,14 @@ If you have a domain like `velouressence.com`:
 2. Add `velouressence.com` and `www.velouressence.com`
 3. Point your domain's DNS to Vercel as instructed
 
-**Backend (Railway):**
-1. Railway → Settings → **Networking → Custom Domain**
+**Backend (Render):**
+1. Render → your service → **Settings → Custom Domains**
 2. Add `api.velouressence.com`
-3. Add a CNAME record in your DNS pointing to Railway's provided target
+3. Add a CNAME record in your DNS pointing to Render's provided target
 
 **After adding custom domains:**
 - Update `VITE_API_URL` in Vercel to `https://api.velouressence.com`
-- Update `CLIENT_URL` in Railway to `https://velouressence.com`
+- Update `CLIENT_URL` in Render to `https://velouressence.com`
 - Redeploy both
 
 ---
@@ -259,22 +262,26 @@ git push
 ## Troubleshooting
 
 **Frontend loads but products don't show**
-→ Check `VITE_API_URL` in Vercel is pointing to your Railway URL (not localhost)
+→ Check `VITE_API_URL` in Vercel is pointing to your Render URL (not localhost)
 → Open browser devtools → Network tab → look for failed API requests
 
-**Railway deploy fails with Prisma error**
-→ Make sure `DIRECT_URL` is set in Railway variables (required for `prisma migrate deploy`)
-→ Check the Railway deploy logs for the exact error
+**Render deploy fails with Prisma error**
+→ Check the Render deploy logs for the exact error
+→ If it's a connection error, verify `DATABASE_URL` is correct in Render environment variables
+
+**First request after idle is very slow**
+→ Normal on Render's free tier — the service sleeps after 15 min of inactivity and takes ~30s to wake
+→ Upgrade to Render's $7/month Starter plan to disable sleep
 
 **CORS errors in browser console**
-→ Make sure `CLIENT_URL` in Railway exactly matches your Vercel URL (including `https://`, no trailing slash)
+→ Make sure `CLIENT_URL` in Render exactly matches your Vercel URL (including `https://`, no trailing slash)
 
 **Paystack webhook not creating orders**
-→ Confirm the webhook URL in Paystack dashboard points to Railway (not localhost)
-→ Check Railway logs for incoming webhook requests
+→ Confirm the webhook URL in Paystack dashboard points to Render (not localhost)
+→ Check Render logs under the **Logs** tab for incoming webhook requests
 
 **Images not uploading**
-→ Verify `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` in Railway are correct
+→ Verify `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` in Render are correct
 → Log in to cloudinary.com and check the credentials under **Settings → Access Keys**
 
 
