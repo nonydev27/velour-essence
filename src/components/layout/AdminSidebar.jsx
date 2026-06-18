@@ -4,6 +4,7 @@ import {
   BarChart2, Settings, LogOut
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
+import VelourLogo from '../ui/VelourLogo';
 
 const links = [
   { to: '/admin/dashboard', label: 'Dashboard', Icon: LayoutDashboard, end: true },
@@ -25,11 +26,8 @@ export default function AdminSidebar() {
   return (
     <aside className="w-56 min-h-screen bg-[#1a1a2e] text-white flex flex-col shrink-0">
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-white/10">
-        <div className="flex flex-col leading-none">
-          <span className="font-serif text-lg font-semibold text-white">Velour</span>
-          <span className="text-[8px] font-medium text-white/50 uppercase tracking-[0.25em]">Essence</span>
-        </div>
+      <div className="px-5 py-4 border-b border-white/10">
+        <VelourLogo className="h-8 w-auto brightness-0 invert opacity-90" />
       </div>
 
       <nav className="flex-1 py-4 px-3 flex flex-col gap-0.5">

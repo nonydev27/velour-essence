@@ -1,7 +1,8 @@
 import { Link, NavLink } from 'react-router-dom';
-import { ShoppingCart, User, Menu, X } from 'lucide-react';
+import { ShoppingCart, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useCart } from '../../hooks/useCart';
+import VelourLogo from '../ui/VelourLogo';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,9 +19,8 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 bg-white border-b border-border">
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
-        <Link to="/" className="flex flex-col leading-none shrink-0">
-          <span className="font-serif text-xl font-semibold text-charcoal tracking-wide">Velour</span>
-          <span className="text-[9px] font-medium text-warm-gray uppercase tracking-[0.25em]">Essence</span>
+        <Link to="/" className="shrink-0" aria-label="Velour Essence — Home">
+          <VelourLogo className="h-9 w-auto" />
         </Link>
 
         {/* Desktop nav */}

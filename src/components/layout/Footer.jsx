@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
+import VelourLogo from '../ui/VelourLogo';
 
 export default function Footer() {
   return (
     <footer className="bg-charcoal text-white/60 mt-16">
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="md:col-span-2">
-          <div className="flex flex-col leading-none mb-4">
-            <span className="font-serif text-xl font-semibold text-white">Velour</span>
-            <span className="text-[9px] font-medium text-white/40 uppercase tracking-[0.25em]">Essence</span>
+          <div className="mb-4">
+            <VelourLogo className="h-9 w-auto brightness-0 invert opacity-90" />
           </div>
           <p className="text-sm leading-relaxed max-w-xs">
             Luxury fragrances crafted with passion, delivered directly to your campus doorstep across Ghana.
