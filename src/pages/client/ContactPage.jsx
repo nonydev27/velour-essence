@@ -19,8 +19,8 @@ const channels = [
 
   {
     label: 'Email',
-    handle: 'hello@velouressence.com',
-    href: 'mailto:hello@velouressence.com',
+    handle: 'karldjansi123@gmail.com',
+    href: 'mailto:karldjansi123@gmail.com',
     description: 'Send us an email and we will respond within 24 business hours.',
     color: 'bg-burgundy',
     icon: <Mail className="w-5 h-5" />,

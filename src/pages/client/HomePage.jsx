@@ -111,8 +111,8 @@ export default function HomePage() {
       {/* ── Feature badges ───────────────────────────────────────────── */}
       <section className="bg-white border-b border-border">
         <div className="max-w-9xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
-          {features.map(({ Icon, label, sub }) => (
-            <div key={label} className="flex items-center gap-3 px-4 first:pl-0 last:pr-0">
+          {features.map(({ Icon,label, sub }) => (
+            <div key={label} className="flex items-center gap-3 px-4  last:pr-0">
               <Icon size={24} className="text-charcoal shrink-0" strokeWidth={1.5} />
               <div>
                 <p className="text-xs font-semibold text-charcoal">{label}</p>
