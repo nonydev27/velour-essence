@@ -49,7 +49,7 @@ const info = [
   {
     Icon: MessageCircle,
     label: 'Response Time',
-    value: 'WhatsApp: within 1 hour\nEmail: within 24 hours',
+    value: 'WhatsApp: within 1 hour\nEmail: within 30 minutes',
   },
 ];
 
