@@ -6,7 +6,7 @@ const team = [
   {
     name: 'Sally Prempeh',
     role: 'Chief Executive Officer',
-    image: '/sally-pic.jpeg',
+    image: '/sally.jpeg',
     phone: '+233 55 964 6969',
     email: 'delademprempeh5@gmail.com',
     bio: 'Sally founded Velour Essence with a vision to bring world-class luxury fragrances to every corner of Ghana and beyond. With over a decade of experience in the beauty and fragrance industry, she leads the brand with elegance, passion, and purpose.',
