@@ -20,6 +20,20 @@ export default function Footer() {
             <li><Link to="/shop?category=Oud" className="hover:text-white transition-colors">Our Collections</Link></li>
           </ul>
         </div>
+
+         <div>
+          <h4 className="text-white text-xs font-semibold uppercase tracking-wider mb-4">Legal</h4>
+          <ul className="space-y-2 text-sm">
+                <li><Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                 <li><Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link></li>
+                <li><Link to="/shipping-policy" className="hover:text-white transition-colors">Shipping Policy</Link></li>
+                 <li><Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                <li><Link to="/comparative-advertising-disclaimer" className="hover:text-white transition-colors">Comparative Advertising Disclaimer</Link></li>
+                 <li><Link to="/compatibility-disclaimer" className="hover:text-white transition-colors">Compatibility Disclaimer</Link></li>
+                <li><Link to="/health-and-safety" className="hover:text-white transition-colors">Health & Safety</Link></li>
+          </ul>
+        </div>
+        
         <div>
           <h4 className="text-white text-xs font-semibold uppercase tracking-wider mb-4">Support</h4>
           <ul className="space-y-2 text-sm">
