@@ -60,13 +60,39 @@ const sections = [
     title: 'Cookies',
     content: [
       {
-        subtitle: null,
+        subtitle: 'First-Party Cookies',
         text: 'Our website may use cookies to enhance your browsing experience. Cookies are small files placed on your device that help us remember your preferences and understand how you use our Site. You can choose to disable cookies in your browser settings, though this may affect some functionality.',
+      },
+      {
+        subtitle: 'Third-Party Cookies',
+        text: 'We use third-party advertising services, including Google AdSense, to display advertisements on our Site. These third-party vendors, including Google, use cookies to serve ads based on your prior visits to our website and other websites on the internet. Google\'s use of advertising cookies enables it and its partners to serve ads to you based on your visit to our Site and/or other sites on the internet.',
+      },
+      {
+        subtitle: 'Opting Out of Personalised Ads',
+        text: 'You may opt out of personalised advertising by visiting Google\'s Ads Settings at https://adssettings.google.com. Alternatively, you can opt out of a third-party vendor\'s use of cookies for personalised advertising by visiting www.aboutads.info. Disabling personalised ads does not remove ads from the Site — you will still see ads, but they will not be tailored to your interests.',
       },
     ],
   },
   {
     number: '6',
+    title: 'Third-Party Advertising',
+    content: [
+      {
+        subtitle: 'Google AdSense',
+        text: 'We use Google AdSense to serve advertisements on this Site. Google AdSense uses the DoubleClick cookie to serve ads based on your visit to our Site and other sites on the internet. You can opt out of the use of the DoubleClick cookie for interest-based advertising by visiting the Google Ads Settings page.',
+      },
+      {
+        subtitle: 'How Google Uses Your Data',
+        text: 'Google, as a third-party vendor, uses cookies to serve ads on our Site. Google\'s use of these cookies is governed by the Google Privacy Policy, which can be reviewed at https://policies.google.com/privacy. By using our website, you consent to the use of such cookies for advertising purposes.',
+      },
+      {
+        subtitle: 'No Sale of Personal Data',
+        text: 'We do not sell your personal information to Google or any other third-party advertiser. Data used for ad personalisation is handled entirely by Google\'s own systems under their privacy policy.',
+      },
+    ],
+  },
+  {
+    number: '7',
     title: 'Your Rights',
     content: [
       {
@@ -82,7 +108,7 @@ const sections = [
     ],
   },
   {
-    number: '7',
+    number: '8',
     title: 'Data Retention',
     content: [
       {
@@ -92,7 +118,7 @@ const sections = [
     ],
   },
   {
-    number: '8',
+    number: '9',
     title: 'Changes to This Policy',
     content: [
       {
