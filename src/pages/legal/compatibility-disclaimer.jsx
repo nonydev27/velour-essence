@@ -1,85 +1,73 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Truck, Mail, Phone } from 'lucide-react';
+import { Info, Mail, Phone } from 'lucide-react';
 import PageWrapper from '../../components/layout/PageWrapper';
 
 const sections = [
   {
     number: '1',
-    title: 'Delivery Areas',
+    title: 'About Fragrance Compatibility',
     content: [
       {
         subtitle: null,
-        text: 'We primarily deliver to university campuses and student residences across Ghana. When placing your order, you will be asked to provide your school and hostel/delivery address. For off-campus or non-student deliveries, please contact us directly to confirm availability and arrange delivery.',
+        text: 'Fragrance is a deeply personal and subjective experience. The same perfume oil can smell noticeably different from person to person due to differences in skin chemistry, pH levels, body temperature, diet, medications, and individual biology.',
       },
     ],
   },
   {
     number: '2',
-    title: 'Processing Time',
+    title: 'Scent Variation on Different Skin Types',
     content: [
       {
         subtitle: null,
-        text: 'Orders are typically processed within 1–2 business days of payment confirmation. You will receive an SMS confirmation once your order is placed and another notification when it is ready for dispatch.',
+        text: 'The way a fragrance develops and projects on your skin may differ significantly from how it smells in the bottle or on another person. Factors that influence scent compatibility include:',
+        bullets: [
+          'Skin pH and natural oils — drier skin may not hold a fragrance as long as oilier skin.',
+          'Body heat — higher body temperature can amplify certain notes.',
+          'Skincare products — moisturisers, soaps, and lotions can interact with fragrance ingredients.',
+          'Hormonal changes — can affect how a scent develops throughout the day.',
+          'Diet and hydration — can subtly influence your natural scent profile.',
+        ],
       },
     ],
   },
   {
     number: '3',
-    title: 'Estimated Delivery Times',
+    title: 'Scent Descriptions Are Guidance Only',
     content: [
       {
         subtitle: null,
-        text: 'Delivery timelines vary depending on your location:',
-        bullets: [
-          'On-campus deliveries: typically 1–3 business days after processing.',
-          'Off-campus / other locations in Ghana: 2–5 business days after processing.',
-          'Remote areas: may take longer; we will communicate an estimated timeline at checkout or upon confirmation.',
-        ],
-      },
-      {
-        subtitle: 'Important',
-        text: 'All delivery timelines are estimates only and are not guaranteed dates. Delays may occur due to factors outside our control, including courier service disruptions or public holidays.',
+        text: 'All fragrance notes, scent descriptions, and comparisons provided on our website are subjective interpretations intended for general guidance. They are not guarantees of how a fragrance will smell on you specifically. Personal scent perception is highly individual.',
       },
     ],
   },
   {
     number: '4',
-    title: 'Shipping Fees',
+    title: 'Compatibility With Other Products',
     content: [
       {
         subtitle: null,
-        text: 'Shipping fees are calculated at checkout based on your delivery location. The final fee will be displayed clearly before you confirm your order. We occasionally offer free delivery promotions — keep an eye on our flash sale banner for updates.',
+        text: 'Our fragrance oils are formulated for direct skin application. We do not guarantee compatibility with all fabric types, materials, or surfaces. Avoid applying directly to delicate fabrics, leather, or polished surfaces, as oils may leave residue or stains.',
       },
     ],
   },
   {
     number: '5',
-    title: 'Address Accuracy',
+    title: 'No Returns Based on Scent Preference',
     content: [
       {
         subtitle: null,
-        text: 'You are responsible for providing a complete and accurate delivery address, including your school name, hostel, and room number where applicable. Velour Essence is not liable for orders that are delayed or undeliverable due to incorrect or incomplete address information provided by the customer.',
+        text: 'Because fragrance compatibility is personal and subjective, we cannot accept returns or issue refunds on the basis that a scent smells different on your skin than expected, or that you simply do not like the fragrance after opening it. We encourage you to read descriptions carefully, consult our FAQ, or contact us for recommendations before purchasing.',
       },
     ],
   },
   {
     number: '6',
-    title: 'Order Tracking & Updates',
+    title: 'Our Recommendation',
     content: [
       {
         subtitle: null,
-        text: 'Once your order is confirmed, our team will reach out via the phone number provided when your order is ready for delivery. If you have not received an update within the estimated timeframe, please contact us directly.',
-      },
-    ],
-  },
-  {
-    number: '7',
-    title: 'Undeliverable Orders',
-    content: [
-      {
-        subtitle: null,
-        text: 'If a delivery attempt fails due to the customer being unavailable or an incorrect address, we will contact you to arrange a re-delivery. Additional delivery fees may apply for re-delivery attempts. If we are unable to reach you after reasonable attempts, the order may be returned and a refund issued minus any incurred delivery costs.',
+        text: 'If you are unsure about a fragrance, reach out to our team. We are happy to describe scents in more detail, suggest alternatives based on your preferences, or help you find a fragrance that is a great match for your chemistry and lifestyle.',
       },
     ],
   },
@@ -90,7 +78,7 @@ const fadeUp = {
   show: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.06, duration: 0.5 } }),
 };
 
-export default function ShippingPolicyPage() {
+export default function CompatibilityDisclaimerPage() {
   return (
     <PageWrapper>
       <section className="relative bg-charcoal overflow-hidden">
@@ -98,11 +86,11 @@ export default function ShippingPolicyPage() {
         <div className="relative z-10 max-w-4xl mx-auto px-6 py-20 text-center">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
             className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 mb-6">
-            <Truck size={22} className="text-white/80" strokeWidth={1.5} />
+            <Info size={22} className="text-white/80" strokeWidth={1.5} />
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
             className="font-serif text-4xl md:text-5xl text-white mb-4 leading-tight">
-            Shipping Policy
+            Compatibility Disclaimer
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
             className="text-white/55 text-sm leading-relaxed max-w-xl mx-auto">
@@ -115,7 +103,7 @@ export default function ShippingPolicyPage() {
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}
           className="bg-white rounded-2xl border border-border p-8">
           <p className="text-sm text-warm-gray leading-relaxed">
-            At <span className="text-charcoal font-medium">Velour Essence</span>, we work hard to get your fragrance to you as quickly and safely as possible. Here's everything you need to know about our shipping and delivery process.
+            At <span className="text-charcoal font-medium">Velour Essence</span>, we believe in full transparency. This disclaimer explains why the same fragrance may smell different depending on the person wearing it.
           </p>
         </motion.div>
       </section>
@@ -153,8 +141,8 @@ export default function ShippingPolicyPage() {
       <section className="max-w-3xl mx-auto px-6 pb-16">
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.55 }}
           className="bg-charcoal rounded-2xl p-8 text-center">
-          <h2 className="font-serif text-2xl text-white mb-2">Delivery Questions?</h2>
-          <p className="text-white/55 text-sm leading-relaxed mb-6 max-w-md mx-auto">Reach us and we'll sort out your delivery as quickly as possible.</p>
+          <h2 className="font-serif text-2xl text-white mb-2">Need a Recommendation?</h2>
+          <p className="text-white/55 text-sm leading-relaxed mb-6 max-w-md mx-auto">We'll help you find the perfect scent for your skin and style.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="tel:+233559646969" className="flex items-center gap-3 bg-white/10 hover:bg-white/20 transition-colors rounded-xl px-5 py-3 text-sm text-white">
               <Phone size={16} strokeWidth={1.5} />0559 646 969
@@ -167,7 +155,7 @@ export default function ShippingPolicyPage() {
         <div className="flex items-center justify-center gap-6 mt-8 text-xs text-warm-gray">
           <Link to="/shop" className="hover:text-charcoal transition-colors">← Back to Shop</Link>
           <span className="text-border">|</span>
-          <Link to="/legal/refund-policy" className="hover:text-charcoal transition-colors">Refund Policy</Link>
+          <Link to="/legal/health-and-safety" className="hover:text-charcoal transition-colors">Health & Safety</Link>
           <span className="text-border">|</span>
           <Link to="/faq" className="hover:text-charcoal transition-colors">FAQ</Link>
         </div>
